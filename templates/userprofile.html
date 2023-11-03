@@ -1,0 +1,54 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-9">
+        <h2 class="text-center font-italic">@{{ user.username }}'s timeline</h2>
+        {% if user.tweets.all %}
+            {% for tweet in user.tweets.all %}
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@{{ tweet.user.username }}</h5>
+                        <p class="card-text"><b>{{ tweet.created_at }}</b> - {{ tweet.tweet }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p>This user seems to keep an air of mystery about themselves.</p>
+        {% endif %}
+    </div>
+
+    <div class="col-3">
+        <h3>Add a Tweet...</h3>
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in form.errors %}
+                    <div class="alert alert-danger">
+                        <b>{{ error|escape }}</b>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+		        <div class="alert alert-danger">
+			        <b>{{ error|escape }}</b>
+        		</div>
+	        {% endfor %}
+        {% endif %}
+
+        <form action="/{{ request.user.username }}/" method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <input type="hidden" value="{{ request.path }}" name="redirect">
+            <input type="submit" value="Add a Tweet" class="btn btn-primary">
+        </form>
+    </div>
+
+</div>
+{% endblock %}

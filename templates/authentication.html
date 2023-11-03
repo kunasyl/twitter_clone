@@ -1,0 +1,83 @@
+{% extends 'templates/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h1>Welcome to, Tweeter!</h1>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+
+        <div class="col-6">
+            <h2>Log In</h2>
+
+            {% if loginform.errors %}
+                {% for field in loginform %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <b>{{ error|escape }}</b>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in loginform.non_field_errors %}
+                    <div class="alert alert-danger">
+                      <b>{{ error|escape }}</b>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form action="." method="post">
+                {% csrf_token %}
+
+                {% for field in loginform %}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+                <input type="submit" value="Log in" name="loginform" class="btn btn-primary">
+            </form>
+        </div>
+
+        <div class="col-6">
+            <h3>Don't have an account? Register here...</h3>
+
+            {% if registrationform.non_field_errors %}
+                <div class="alert danger">
+                    {{ registrationform.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% if registrationform.errors %}
+                {% for field in registrationform %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <b>{{ error|escape }}</b>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in registrationform.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <b>{{ error|escape }}</b>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form action="." method="post">
+                {% csrf_token %}
+                {% for field in registrationform %}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <input type="submit" value="Register" name="registrationform" class="btn btn-primary">
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}
